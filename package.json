@@ -1,0 +1,77 @@
+{
+  "name": "projectile-trajectory-simulation",
+  "version": "0.1.0",
+  "description": "The projectile simulation app",
+  "homepage": "/trajectory",
+  "keywords": [
+    "projectile",
+    "trajectory",
+    "planetary bodies"
+  ],
+  "author": {
+    "name": "Bhavneet Soni",
+    "email": "bhavneetsoni@gmail.com",
+    "url": "https://github.com/bhavneetsoni99/"
+  },
+  "private": true,
+  "dependencies": {
+    "@types/classnames": "2.2.3",
+    "@types/jest": "22.1.4",
+    "@types/lodash": "^4.14.112",
+    "@types/node": "6.0.105",
+    "@types/react": "16.3.12",
+    "@types/react-dom": "16.0.5",
+    "@types/react-redux": "5.0.15",
+    "@types/redux": "3.6.0",
+    "classnames": "2.2.5",
+    "core-js": "2.5.3",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
+    "husky": "1.0.0-rc.9",
+    "prettier": "~1.11.1",
+    "react": "16.3.1",
+    "react-dom": "16.3.1",
+    "react-redux": "5.0.7",
+    "react-scripts-ts": "2.16.0",
+    "react-test-renderer": "16.3.2",
+    "redux": "3.7.2",
+    "redux-devtools-extension": "2.13.2",
+    "reselect": "3.0.1",
+    "stylelint": "9.3.0",
+    "tslint-config-airbnb": "~5.7.0",
+    "tslint-config-prettier": "~1.9.0",
+    "tslint-plugin-prettier": "~1.3.0",
+    "tslint-react": "~3.5.1",
+    "typescript": "2.8.1",
+    "postcss-cli": "^4.1.1"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "test": "npm run lint && npm run test:unit:coverage && npm run build",
+    "build": "react-scripts-ts build",
+    "test:unit": "react-scripts-ts test --env=jsdom",
+    "test:unit:coverage": "npm run test:unit -- --coverage",
+    "test:unit:watch": "npm run test:unit -- --watch",
+    "stylelint": "stylelint 'src/**/*.css'",
+    "lint": "react-scripts-ts tslint && npm run stylelint",
+    "lint:fix": "npm run lint -- --fix && npm run stylelint -- --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint:fix && npm run test:unit && npm run build"
+    }
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}",
+      "!**/*.{d}.*",
+      "!**/node_modules/**"
+    ],
+    "coverageReporters": [
+      "lcov"
+    ]
+  },
+  "devDependencies": {
+    "tslint": "^5.10.0"
+  }
+}

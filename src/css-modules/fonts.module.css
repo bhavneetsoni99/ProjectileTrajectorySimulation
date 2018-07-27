@@ -1,0 +1,42 @@
+/**
+ * DO NOT IMPORT THESE FONTS DIRECTLY. These are imported in `root.module.css`,
+ * which consuming projects should use for the root of their application.
+ *
+ * ```typescript
+   const styles = require('./css-modules/root.module.css');
+   ReactDOM.render(
+     <div className={styles.root}>
+       <AppView />
+     </div>,
+     document.getElementById('root') as HTMLElement,
+   );
+ * ```
+ */
+
+@font-face {
+  font-family: 'ITCFrankGoth';
+  src: url('../fonts/ITCFrankGothForAMPF-Lt.WOFF') format('woff');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ITCFrankGoth';
+  src: url('../fonts/ITCFrankGothForAMPF-Bk.WOFF') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ITCFrankGoth';
+  src: url('../fonts/ITCFrankGothForAMPF-Md.WOFF') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ITCFrankGoth';
+  src: url('../fonts/ITCFrankGothForAMPF-Dm.WOFF') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}

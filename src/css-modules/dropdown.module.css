@@ -1,0 +1,53 @@
+@value (
+  white,
+  dark-gray,
+  border-gray,
+  dark-blue
+) from 'constants.module.css'
+@value select-width: 350px;
+@value select-height: 45px;
+
+.select {
+  display: inline-block;
+  cursor: pointer;
+
+  width: select-width;
+  height: select-height;
+
+  font: inherit;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.5em;
+  padding: 0.5em 3.5em 0.5em 1em;
+  background-color: white;
+  color: dark-gray;
+
+  border: 1px border-gray solid;
+  border-radius: 4px;
+  transition: border-color .15s ease-in-out;
+
+  background-image:
+  linear-gradient(45deg, transparent 50%, dark-blue 50%),
+  linear-gradient(135deg, dark-blue 50%, transparent 50%),
+  linear-gradient(to right, border-gray, border-gray);
+
+  background-position:
+  calc(100% - 20px) calc(1em + 2px),
+  calc(100% - 15px) calc(1em + 2px),
+  calc(100% - 2.5em) 0.25em;
+  background-size: 5px 5px, 5px 5px, 1px 2em;
+  background-repeat: no-repeat;
+}
+
+.select::-ms-expand {
+  display: none;
+}
+
+.select:hover {
+  background-image:
+  linear-gradient(45deg, transparent 50%, medium-blue 50%),
+  linear-gradient(135deg, medium-blue 50%, transparent 50%),
+  linear-gradient(to right, border-gray, border-gray);
+  cursor: pointer;
+  border: 1px solid hover-blue;
+}

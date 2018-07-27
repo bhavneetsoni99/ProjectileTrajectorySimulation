@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "tslint-config-airbnb",
+    "tslint-react",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier"
+  ],
+  "rules": {
+    "no-any": false,
+    "no-console": [
+      true
+    ],
+    "no-increment-decrement": false,
+    "strict-boolean-expressions": false,
+    "jsx-no-lambda": false,
+    "import-name": false,
+    "prettier": [
+      true,
+      {
+        "printWidth": 90,
+        "singleQuote": true,
+        "trailingComma": "all"
+      }
+    ],
+    "no-unused-variable": [
+      true,
+      "check-parameters"
+    ],
+    "member-access": true,
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-pascal-case"
+    ]
+  },
+  "jsRules": {
+    "no-eval": true
+  }
+}

@@ -1,0 +1,19 @@
+@value (
+  medium-blue,
+  hover-blue
+) from './constants.module.css';
+
+@import './fonts.module.css';
+
+.root {
+}
+
+.root a {
+  text-decoration: none;
+  color: medium-blue;
+}
+
+.root a:hover {
+  color: hover-blue;
+  outline: none;
+}
