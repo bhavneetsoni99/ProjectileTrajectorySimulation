@@ -44,7 +44,8 @@
             "%",
             "ms",
             "s",
-            "deg"
+            "deg",
+            "em"
         ],
         "shorthand-property-no-redundant-values": true,
         "property-blacklist": [],

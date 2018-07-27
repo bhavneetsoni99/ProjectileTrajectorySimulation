@@ -1,34 +1,58 @@
+/* stylelint-disable */
 /* COLORS */
 @value light-blue: #d8e8ff;
+
 @value medium-blue: #577dbe;
+
 @value dark-blue: #003d6d;
+
 @value light-red: #f2d9df;
+
 @value dark-red: #b81237;
+
 @value hover-blue: #6495ea;
+
 @value hover-dark-blue: #114e7e;
+
 @value dark-green: #7db742;
+
 @value light-green: #e7f3da;
+
 @value light-yellow: #f7eeb2;
+
 @value dark-yellow: #9b8910;
 
 @value background-gray: #efefef;
+
 @value border-gray: #ccc;
+
 @value medium-light-gray: #999;
+
 @value medium-gray: #777;
+
 @value dark-gray: #333;
 
 @value white: #ffffff;
+
 @value black: #000000;
+
 @value header-footer-light-gray: #ccc;
+
 @value header-footer-link-blue: #a4c4ff;
 
 /* FONT-SIZING */
 @value very-small-font-size: 8px;
+
 @value small-font-size: 12px;
+
 @value mid-small-font-size: 14px;
+
 @value normal-font-size: 16px;
+
 @value medium-font-size: 20px;
+
 @value large-font-size: 24px;
+
 @value title-font-size: 28px;
 
 /* LAYOUT-SIZING */
