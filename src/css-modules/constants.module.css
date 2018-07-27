@@ -1,5 +1,6 @@
 /* stylelint-disable */
 /* COLORS */
+
 @value light-blue: #d8e8ff;
 
 @value medium-blue: #577dbe;
@@ -41,6 +42,7 @@
 @value header-footer-link-blue: #a4c4ff;
 
 /* FONT-SIZING */
+
 @value very-small-font-size: 8px;
 
 @value small-font-size: 12px;
@@ -56,16 +58,27 @@
 @value title-font-size: 28px;
 
 /* LAYOUT-SIZING */
+
 @value very-small-margin: 4px;
+
 @value small-margin: 8px;
+
 @value normal-margin: 16px;
+
 @value normal-medium-margin: 20px;
+
 @value medium-margin: 24px;
+
 @value medium-large-margin: 30px;
+
 @value large-margin: 36px;
 
 /* MEDIA-SIZING */
+
 @value x-large-width: 1300px;
+
 @value large-width: 993px;
+
 @value med-width: 767px;
+
 @value small-width: 544px;
