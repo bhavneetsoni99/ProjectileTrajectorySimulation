@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { findIndex } from 'lodash';
-
 import { ValidationErrorLabeledDiv } from './Error';
 
 const styles = require('../css-modules/dropdown.module.css');

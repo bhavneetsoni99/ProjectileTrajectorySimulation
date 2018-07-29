@@ -5,7 +5,7 @@
   dark-gray,
   border-gray,
   dark-blue
-) from 'constants.module.css';
+) from './constants.module.css';
 
 @value select-width: 350px;
 

@@ -2,7 +2,7 @@
   "name": "projectile-trajectory-simulation",
   "version": "0.1.0",
   "description": "The projectile simulation app",
-  "homepage": "/trajectory",
+  "homepage": "/homepage",
   "keywords": [
     "projectile",
     "trajectory",
@@ -72,6 +72,8 @@
     ]
   },
   "devDependencies": {
+    "css-loader": "^1.0.0",
+    "style-loader": "^0.21.0",
     "tslint": "^5.10.0"
   }
 }

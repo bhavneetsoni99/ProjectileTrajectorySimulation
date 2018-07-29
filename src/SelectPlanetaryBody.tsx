@@ -7,7 +7,7 @@ import {
   RootState,
   mapDispatchToSetPlanet,
   selectSelectedPlanet,
-} from './reducers/planets';
+} from 'reducers/planets';
 
 interface State {
   selectedPlanet: Planet;
@@ -15,6 +15,14 @@ interface State {
 interface Props {
   setPlanet: (planet: Planet) => void;
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setPlanet: mapDispatchToSetPlanet(dispatch),
+});
+
+const mapStateToProps = (state: RootState) => ({
+  selectedPlanet: selectSelectedPlanet(state),
+});
 
 class PlanetsDropdown extends DropdownView<Planet> {}
 
@@ -50,11 +58,6 @@ class SelectPlanetaryBody extends React.Component<Props, State> {
     this.setState({ selectedPlanet: planet });
   }
 }
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setPlanet: mapDispatchToSetPlanet(dispatch),
-});
 
-const mapStateToProps = (state: RootState) => ({
-  selectedPlanet: selectSelectedPlanet(state),
-});
+
 export default connect(mapStateToProps, mapDispatchToProps)<any>(SelectPlanetaryBody);
