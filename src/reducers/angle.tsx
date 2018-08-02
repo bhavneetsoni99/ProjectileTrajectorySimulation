@@ -9,7 +9,7 @@ enum ActionType {
   SET = 'ANGLE/SET',
 }
 
-export const mapDispatchToSetPlanet = (dispatch: Dispatch) => (angle: number) => {
+export const mapDispatchToSetAngle = (dispatch: Dispatch) => (angle: number) => {
   // for show of concept only we can directly dispatch an Action object here
   dispatch(createAction(ActionType.SET)({ angleOfThrow: angle }));
 };
@@ -25,4 +25,4 @@ export interface RootState {
   angle: State;
 }
 
-export const selectResponseStatus = (state: RootState) => state.angle.angleOfThrow;
+export const selectAngleOfThrow = (state: RootState) => state.angle.angleOfThrow;

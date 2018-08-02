@@ -17,8 +17,7 @@ export const mapDispatchToSetPlanet = (dispatch: Dispatch) => (planet: Planet) =
 
 export const reducer = createReducer(ActionType.SET)(defaultState)(
   (state: State, payload: State) => {
-    const nextState = { ...state, ...payload };
-    return nextState;
+    return { ...state, ...payload };
   },
 );
 

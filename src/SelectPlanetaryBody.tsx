@@ -7,13 +7,11 @@ import {
   RootState,
   mapDispatchToSetPlanet,
   selectSelectedPlanet,
-} from 'reducers/planets';
+} from './reducers/planets';
 
-interface State {
-  selectedPlanet: Planet;
-}
 interface Props {
   setPlanet: (planet: Planet) => void;
+  selectedPlanet: Planet;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -26,10 +24,9 @@ const mapStateToProps = (state: RootState) => ({
 
 class PlanetsDropdown extends DropdownView<Planet> {}
 
-class SelectPlanetaryBody extends React.Component<Props, State> {
+class SelectPlanetaryBody extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.state = { selectedPlanet: PLANETARY_BODIES[0] };
   }
 
   public render() {
@@ -38,26 +35,25 @@ class SelectPlanetaryBody extends React.Component<Props, State> {
         <h3>Choose a Planet to run the simulation on </h3>
         <PlanetsDropdown
           items={PLANETARY_BODIES}
-          selectedItem={this.state.selectedPlanet}
+          selectedItem={this.props.selectedPlanet}
           itemRender={(planet: Planet) => planet.planet}
           onSelection={(planet: Planet) => this.handlePlanetSelection(planet)}
           errorDecoratingEnabled={false}
         />
         <br />
-        <div>
-          Selected planet is {this.state.selectedPlanet.planet} acceleration due to
-          gravity(g) is {this.state.selectedPlanet.g} and an escape velocity of{' '}
-          {this.state.selectedPlanet.ev}
-        </div>
+        <p>
+          Selected planet is {this.props.selectedPlanet.planet} acceleration due to
+          gravity(g) is {this.props.selectedPlanet.g} m/sec/sec and an escape velocity of{' '}
+          {this.props.selectedPlanet.ev * 1000} m/sec
+        </p>
         <br />
       </div>
     );
   }
 
   private handlePlanetSelection(planet: Planet) {
-    this.setState({ selectedPlanet: planet });
+    this.props.setPlanet(planet);
   }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)<any>(SelectPlanetaryBody);

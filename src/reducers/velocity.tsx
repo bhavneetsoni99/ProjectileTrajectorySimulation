@@ -25,5 +25,5 @@ export interface RootState {
   velocity: State;
 }
 
-export const selectResponseStatus = (state: RootState) =>
+export const selectSelectedVelocity = (state: RootState) =>
   state.velocity.selectedInitialVelocity;

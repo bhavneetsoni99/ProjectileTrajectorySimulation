@@ -1,119 +1,131 @@
 import * as React from 'react';
-import { clone } from 'lodash';
 import { ValidationErrorLabeledDiv } from './Error';
+import { connect } from 'react-redux';
+import { Planet } from '../Data/PlanetsData';
+import { Dispatch } from '../Util';
+import { selectSelectedPlanet } from '../reducers/planets';
+import { mapDispatchToSetVelocity, selectSelectedVelocity } from '../reducers/velocity';
+import { mapDispatchToSetAngle, selectAngleOfThrow } from '../reducers/angle';
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
+export function filterValueByRegex(value: string, regex: RegExp) {
+  let filteredValue = value;
+  if (regex && value) {
+    const matchingChars = value.match(regex);
+    if (matchingChars) {
+      filteredValue = matchingChars.join('');
+    } else {
+      filteredValue = '';
+    }
+  }
+  return filteredValue;
+}
+
 export interface Props {
-  inputId?: string;
+  inputId: string;
   value: string;
   placeHolder?: string;
   maxLength?: number;
-  errorMessage?: string;
-  onChange?: (value: string) => void;
+  errorMessage: string;
   onEnter?: (value: string) => void;
-  isNumericOnly?: boolean;
+  inputTypeRegex?: RegExp;
+  checkValue?: (value: string) => void;
+  selectedPlanet?: Planet;
+  inputDiscription: string;
+  setVelocity?: (velocity: number) => void;
+  setAngle?: (angle: number) => void;
 }
 
 export interface State {
   value: string;
-  errorMessage?: string;
-  isEditing: boolean;
+  errorMessage: string;
 }
 
-export class TextInputView extends React.Component<Props, State> {
-  public static alphaOnly = /[a-zA-Z]+/g;
-  public static numericOnly = /[\d]+/g;
-  public static numericAndDecimalOnly = /[0-9\.\-]+/g;
-  public static alphaNumericOnly = /[0-9a-zA-Z]+/g;
-
-  public static alphaNumericAndSpaceOnly = /[0-9a-zA-Z ]+/g;
-  public static alphaAndSpaceOnly = /[a-zA-Z ]+/g;
-
+class TextInputView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      value: '',
-      errorMessage: undefined,
-      isEditing: false,
+      value: props.value,
+      errorMessage: '',
     };
-  }
-
-  public componentWillMount() {
-    this.updateStateFromProps(this.props);
-  }
-
-  public componentWillReceiveProps(nextProps: Props) {
-    this.updateStateFromProps(nextProps);
   }
 
   public render() {
     return (
-      <ValidationErrorLabeledDiv errorMessage={this.props.errorMessage}>
+      <ValidationErrorLabeledDiv errorMessage={this.state.errorMessage}>
         {this.renderInput()}
       </ValidationErrorLabeledDiv>
     );
   }
 
   private renderInput() {
-    const { isNumericOnly, inputId, maxLength, placeHolder } = this.props;
-
-
-    let value: string;
-    if (this.state.isEditing) {
-      value = clone(this.state.value);
-    } else {
-      value = clone(this.props.value);
-    }
+    const { inputId, maxLength, placeHolder } = this.props;
 
     return (
-  <input
-    onKeyDown={this.handleKeyDown}
-    onFocus={this.handleFocus}
-    onBlur={this.handleBlur}
-    id={inputId}
-    placeholder={placeHolder}
-    maxLength={maxLength}
-    value={value}
-  />
+      <div>
+        <span>{this.props.inputDiscription}</span>
+        <input
+          onBlur={this.handleBlur}
+          onChange={e => this.handleOnChange(e)}
+          id={inputId}
+          placeholder={placeHolder}
+          maxLength={maxLength}
+          value={this.props.value}
+        />
+      </div>
     );
   }
 
-  private updateStateFromProps(props: Props) {
-    this.setState({
-      value: props.value,
-      errorMessage: props.errorMessage,
-    });
-  }
-
-  private handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const { onEnter } = this.props;
-    if (onEnter && e.key === 'Enter') {
-      onEnter(e.currentTarget.value);
-    }
-  };
-
-  private handleFocus = () => this.setState({ isEditing: true, value: this.props.value });
-
   private handleBlur = () => {
-    const { formatter, parser } = this.props.transform!;
-    this.setState({ isEditing: false, value: formatter(this.state.value) });
-    if (this.props.onChange) {
-      this.props.onChange(parser(this.state.value));
+    if (this.isValidValue(this.props.value)) {
+      this.setState({
+        errorMessage: '',
+      });
+    } else {
+      this.setState({ errorMessage: this.props.errorMessage });
     }
   };
 
-  private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const filteredValue = this.getFilteredValue(e.target.value);
-    this.setState({
-      value: filteredValue,
-      errorMessage: this.props.errorMessage,
-    });
-    if (this.props.onChange && !this.props.transform) {
-      this.props.onChange(filteredValue);
+  private handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const numberValue = Number(this.getFilteredValue(e.target.value));
+    if (this.props.setVelocity && this.props.setAngle) {
+      this.props.inputId === 'velocity'
+        ? this.props.setVelocity(numberValue)
+        : this.props.setAngle(numberValue);
     }
   };
 
   private getFilteredValue(value: string) {
-    return this.props.regex ? filterValueByRegex(value, this.props.regex) : value;
+    return this.props.inputTypeRegex
+      ? filterValueByRegex(value, this.props.inputTypeRegex)
+      : value;
+  }
+  private isValidValue(value: string) {
+    const numericValue = Number(value);
+    return (
+      numericValue > 0 &&
+      numericValue <
+        (this.props.selectedPlanet && this.props.inputId === 'velocity'
+          ? this.props.selectedPlanet.ev * 1000
+          : 180)
+    );
   }
 }
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setVelocity: mapDispatchToSetVelocity(dispatch),
+  setAngle: mapDispatchToSetAngle(dispatch),
+});
+
+const mapStateToProps = (state: any, ownProps: Props) => {
+  const numericValue: number =
+    ownProps.inputId === 'velocity'
+      ? selectSelectedVelocity(state)
+      : selectAngleOfThrow(state);
+  return {
+    ...ownProps,
+    value: numericValue.toString(),
+    selectedPlanet: selectSelectedPlanet(state),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)<any>(TextInputView);
