@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Planet } from './Data/PlanetsData';
-// import { Dispatch } from './Util';
+import { Dispatch } from './Util';
 import {
   // RootState,
   selectSelectedPlanet,
@@ -36,6 +36,8 @@ const mapStateToProps = (state: any) => ({
   V: selectSelectedVelocity(state),
 });
 
+const mapDispatchToProps = (dipatch: Dispatch) => ({});
+
 class TrajectoryControllerView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -55,9 +57,9 @@ class TrajectoryControllerView extends React.Component<Props, State> {
         <p>
           {`selectedPlanetary Body is  ${
             this.props.selectedPlanet.planet
-          } selected velocity is ${this.props.V} and the angle of throw in radians is ${
+            } selected velocity is ${this.props.V} and the angle of throw in radians is ${
             this.props.theta
-          }`}
+            }`}
         </p>
         <button onClick={() => this.handleRunSimmulation()}> {'Run simmulation'} </button>
         <br />
@@ -83,18 +85,19 @@ class TrajectoryControllerView extends React.Component<Props, State> {
     const H = V * V * Number((Math.sin(sinTheta) / (2 * g)).toFixed(6));
     // Range achieved
     const R = V * V * Math.sin(2 * theta) / g;
+    const maxRange = V * V / g;
     const Vx = V * Math.cos(theta);
     const Vy = V * Math.sin(theta);
     const positionDataPoints: Position[] = [];
-    for (let t = 0.042; t < T; t = t + 0.042) {
+    for (let t = 0.042; t < T; t = t + 0.050) {
       t = Number(t.toFixed(3));
-      const x = Vx * t;
-      const y = (Vy - g * t / 2) * t;
+      const x = Number((Vx * t).toFixed(3));
+      const y = Number(((Vy - g * t / 2) * t).toFixed(3));
       positionDataPoints.push({ x, y });
     }
-    // tslint:disable:no-console
+
     console.log(positionDataPoints);
-    // tslint:disable:no-console
+
     console.log(
       'Range is   ' + R + '   Max height achieved is  ' + H + '  time of flight is  ' + T,
     );
@@ -102,13 +105,13 @@ class TrajectoryControllerView extends React.Component<Props, State> {
     this.setState({
       simulationResult: positionDataPoints,
       maxHeight: H,
-      maxWidth: R,
+      maxWidth: maxRange,
       timeOfFlight: T,
     });
     this.displayResults();
   }
 
-  private displayResults() {}
+  private displayResults() { }
 }
 
 export default connect(mapStateToProps, undefined)<any>(TrajectoryControllerView);

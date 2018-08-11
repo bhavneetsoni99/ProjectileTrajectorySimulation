@@ -36,6 +36,23 @@ export interface Props {
   setAngle?: (angle: number) => void;
 }
 
+const mapStateToProps = (state: any, ownProps: Props) => {
+  const numericValue: number =
+    ownProps.inputId === 'velocity'
+      ? selectSelectedVelocity(state)
+      : selectAngleOfThrow(state);
+  return {
+    ...ownProps,
+    value: numericValue.toString(),
+    selectedPlanet: selectSelectedPlanet(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setVelocity: mapDispatchToSetVelocity(dispatch),
+  setAngle: mapDispatchToSetAngle(dispatch),
+});
+
 export interface State {
   value: string;
   errorMessage: string;
@@ -111,21 +128,5 @@ class TextInputView extends React.Component<Props, State> {
     );
   }
 }
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setVelocity: mapDispatchToSetVelocity(dispatch),
-  setAngle: mapDispatchToSetAngle(dispatch),
-});
-
-const mapStateToProps = (state: any, ownProps: Props) => {
-  const numericValue: number =
-    ownProps.inputId === 'velocity'
-      ? selectSelectedVelocity(state)
-      : selectAngleOfThrow(state);
-  return {
-    ...ownProps,
-    value: numericValue.toString(),
-    selectedPlanet: selectSelectedPlanet(state),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)<any>(TextInputView);

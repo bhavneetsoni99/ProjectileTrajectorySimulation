@@ -8,14 +8,14 @@
   "rules": {
     "no-any": false,
     "no-console": [
-      true
+      false
     ],
     "no-increment-decrement": false,
     "strict-boolean-expressions": false,
     "jsx-no-lambda": false,
     "import-name": false,
     "prettier": [
-      true,
+      false,
       {
         "printWidth": 90,
         "singleQuote": true,
@@ -23,7 +23,7 @@
       }
     ],
     "no-unused-variable": [
-      true,
+      false,
       "check-parameters"
     ],
     "member-access": true,
