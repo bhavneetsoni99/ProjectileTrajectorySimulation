@@ -2,10 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Planet } from './Data/PlanetsData';
 import { Dispatch } from './Util';
-import {
-  // RootState,
-  selectSelectedPlanet,
-} from 'reducers/planets';
+import { selectSelectedPlanet, currentDisplayAreaCounter } from 'reducers/planets';
 import { selectSelectedVelocity } from 'reducers/velocity';
 import { selectAngleOfThrow } from 'reducers/angle';
 
@@ -17,6 +14,8 @@ interface State {
   maxWidth: number;
   maxHeight: number;
   timeOfFlight: number;
+  h: number;
+  R: number;
 }
 interface Props {
   selectedPlanet: Planet;
@@ -29,7 +28,7 @@ export interface Position {
   y: number;
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: any, props: any) => ({
   selectedPlanet: selectSelectedPlanet(state),
   g: selectSelectedPlanet(state).g,
   theta: Number((selectAngleOfThrow(state) * Math.PI / 180).toFixed(6)),
@@ -48,6 +47,8 @@ class TrajectoryControllerView extends React.Component<Props, State> {
       maxWidth: 0,
       maxHeight: 0,
       timeOfFlight: 0,
+      R: 0,
+      h: 0,
     };
   }
 
@@ -63,55 +64,56 @@ class TrajectoryControllerView extends React.Component<Props, State> {
         </p>
         <button onClick={() => this.handleRunSimmulation()}> {'Run simmulation'} </button>
         <br />
-        {this.state.simulationResult.length && (
-          <TrajectoryDisplayView
-            data={this.state.simulationResult}
-            maxHeight={this.state.maxHeight}
-            maxWidth={this.state.maxWidth}
-            timeOfFlight={this.state.timeOfFlight}
-          />
-        )}
+        <TrajectoryDisplayView
+          data={this.state.simulationResult}
+          maxHeight={this.state.maxHeight}
+          maxWidth={this.state.maxWidth}
+          timeOfFlight={this.state.timeOfFlight}
+          backGroundColor={this.props.selectedPlanet.backGroundColor}
+          R={this.state.R}
+          h={this.state.h}
+        />
       </div>
     );
   }
 
   public handleRunSimmulation() {
-    const { V, g, theta } = this.props;
-    // time of flight
-    const T = Number((2 * V * Math.sin(theta) / g).toFixed(6));
+    const { V, g, theta, selectedPlanet } = this.props;
+    if (V < selectedPlanet.ev * 1000) {
 
-    // maximum height achieved
-    const sinTheta = Number(Math.sin(theta).toFixed(6));
-    const H = V * V * Number((Math.sin(sinTheta) / (2 * g)).toFixed(6));
-    // Range achieved
-    const R = V * V * Math.sin(2 * theta) / g;
-    const maxRange = V * V / g;
-    const Vx = V * Math.cos(theta);
-    const Vy = V * Math.sin(theta);
-    const positionDataPoints: Position[] = [];
-    for (let t = 0.042; t < T; t = t + 0.050) {
-      t = Number(t.toFixed(3));
-      const x = Number((Vx * t).toFixed(3));
-      const y = Number(((Vy - g * t / 2) * t).toFixed(3));
-      positionDataPoints.push({ x, y });
+      // time of flight
+      const T = Number((2 * V * Math.sin(theta) / g).toFixed(6));
+
+      // maximum height achieved
+
+      const sinTheta = Number(Math.sin(theta).toFixed(6));
+      const H = V * V * (Math.sin(1)) / (2 * g);
+      const h = V * V * Number((Math.sin(sinTheta) / (2 * g)).toFixed(6));
+      // Range achieved
+      const R = V * V * Math.sin(2 * theta) / g;
+      const maxRange = V * V / g;
+      const Vx = V * Math.cos(theta);
+      const Vy = V * Math.sin(theta);
+      const positionDataPoints: Position[] = [];
+      let t = 0.00;
+      while (t <= T) {
+        t = t + 0.05
+        t = Number(t.toFixed(2));
+        const x = Number((Vx * t).toFixed(3));
+        const y = Number(((Vy - g * t / 2) * t).toFixed(3));
+        positionDataPoints.push({ x, y });
+      }
+      this.setState({
+        h,
+        R,
+        simulationResult: positionDataPoints,
+        maxHeight: H,
+        maxWidth: maxRange,
+        timeOfFlight: T,
+      });
     }
 
-    console.log(positionDataPoints);
-
-    console.log(
-      'Range is   ' + R + '   Max height achieved is  ' + H + '  time of flight is  ' + T,
-    );
-
-    this.setState({
-      simulationResult: positionDataPoints,
-      maxHeight: H,
-      maxWidth: maxRange,
-      timeOfFlight: T,
-    });
-    this.displayResults();
   }
-
-  private displayResults() { }
 }
 
 export default connect(mapStateToProps, undefined)<any>(TrajectoryControllerView);

@@ -8,11 +8,11 @@ export const ValidationErrorLabeledDiv: React.SFC<ValidationProps> = ({
   errorMessage,
   children,
 }) => (
-  <div className={errorMessage != null ? 'cast-c-validation-error' : ''}>
-    {errorMessage ? <ValidationErrorLabel errorMessage={errorMessage} /> : null}
-    {children}
-  </div>
-);
+    <div className={errorMessage !== '' ? 'cast-c-validation-error' : ''}>
+      {errorMessage ? <ValidationErrorLabel errorMessage={errorMessage} /> : null}
+      {children}
+    </div>
+  );
 
 export const ValidationErrorLabel = ({ errorMessage }: ValidationProps) => (
   <div className="cast-c-validation-error__label">{errorMessage}</div>

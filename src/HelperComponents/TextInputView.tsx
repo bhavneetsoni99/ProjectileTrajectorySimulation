@@ -6,7 +6,7 @@ import { Dispatch } from '../Util';
 import { selectSelectedPlanet } from '../reducers/planets';
 import { mapDispatchToSetVelocity, selectSelectedVelocity } from '../reducers/velocity';
 import { mapDispatchToSetAngle, selectAngleOfThrow } from '../reducers/angle';
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> { }
 
 export function filterValueByRegex(value: string, regex: RegExp) {
   let filteredValue = value;
@@ -121,10 +121,10 @@ class TextInputView extends React.Component<Props, State> {
     const numericValue = Number(value);
     return (
       numericValue > 0 &&
-      numericValue <
-        (this.props.selectedPlanet && this.props.inputId === 'velocity'
-          ? this.props.selectedPlanet.ev * 1000
-          : 180)
+      numericValue <=
+      (this.props.selectedPlanet && this.props.inputId === 'velocity'
+        ? this.props.selectedPlanet.ev * 1000
+        : 90)
     );
   }
 }

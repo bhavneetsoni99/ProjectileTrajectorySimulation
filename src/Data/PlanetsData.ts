@@ -4,6 +4,7 @@ export interface Planet {
   density: number; // KG/M3
   g: number; // M/SEC2
   ev: number; // KM/SEC
+  backGroundColor: string;
 }
 
 export const PLANETARY_BODIES = [
@@ -13,6 +14,7 @@ export const PLANETARY_BODIES = [
     density: 5514,
     g: 9.82,
     ev: 11.2,
+    backGroundColor: '#86af49',
   },
   {
     planet: 'MERCURY',
@@ -20,6 +22,7 @@ export const PLANETARY_BODIES = [
     density: 5427,
     g: 3.7,
     ev: 4.3,
+    backGroundColor: '#feb236',
   },
   {
     planet: 'VENUS',
@@ -27,6 +30,7 @@ export const PLANETARY_BODIES = [
     density: 5243,
     g: 8.9,
     ev: 10.4,
+    backGroundColor: '#a2b9bc',
   },
   {
     planet: 'MOON',
@@ -34,6 +38,7 @@ export const PLANETARY_BODIES = [
     density: 3340,
     g: 1.6,
     ev: 2.4,
+    backGroundColor: '#e6e2d3',
   },
   {
     planet: 'MARS',
@@ -41,6 +46,7 @@ export const PLANETARY_BODIES = [
     density: 3933,
     g: 3.7,
     ev: 5,
+    backGroundColor: '#f18973',
   },
   {
     planet: 'JUPITER',
@@ -48,6 +54,7 @@ export const PLANETARY_BODIES = [
     density: 1326,
     g: 23.1,
     ev: 59.5,
+    backGroundColor: '#ff7b25',
   },
   {
     planet: 'SATURN',
@@ -55,6 +62,7 @@ export const PLANETARY_BODIES = [
     density: 687,
     g: 9,
     ev: 35.5,
+    backGroundColor: '#d6cbd3',
   },
   {
     planet: 'URANUS',
@@ -62,6 +70,7 @@ export const PLANETARY_BODIES = [
     density: 1271,
     g: 8.7,
     ev: 21.3,
+    backGroundColor: '#92a8d1',
   },
   {
     planet: 'NEPTUNE',
@@ -69,6 +78,7 @@ export const PLANETARY_BODIES = [
     density: 1638,
     g: 11,
     ev: 23.5,
+    backGroundColor: '#034f84',
   },
   {
     planet: 'PLUTO',
@@ -76,5 +86,6 @@ export const PLANETARY_BODIES = [
     density: 2095,
     g: 0.7,
     ev: 1.3,
+    backGroundColor: '#e6e2d3',
   },
 ];

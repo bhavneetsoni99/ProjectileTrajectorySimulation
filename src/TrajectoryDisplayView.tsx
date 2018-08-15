@@ -1,89 +1,148 @@
 import * as React from 'react';
-import { Position } from './TrajectoryControllerView';
 import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
+
+import { Position } from './TrajectoryControllerView';
+
 interface Props {
   data: Position[];
   maxHeight: number;
   maxWidth: number;
   timeOfFlight: number;
+  backGroundColor: string;
+  R: number;
+  h: number;
 }
-class TrajectoryDisplayView extends React.Component<Props> {
+
+interface State {
+  maxHeight: number;
+  maxWidth: number;
+  backGroundColor: string;
+}
+
+// methods to work with canvas
+let counter = 0;
+
+class TrajectoryDisplayView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.canvas = React.createRef();
+    this.refCanvas = React.createRef<HTMLCanvasElement>();
+    this.state = {
+      maxHeight: props.maxHeight,
+      maxWidth: props.maxWidth,
+      backGroundColor: props.backGroundColor,
+    }
   }
-  // private canvas = React.createRef<HTMLCanvasElement>();
-  public componentDidUpdate() {
-    this.updateCanvas();
-  }
-  public updateCanvas() {
-    console.log('updated Canvas')
-    const canvas: any = document.getElementById('mycanvas');
-    const ctx = canvas.getContext('2d');
-    const ctx2 = canvas.getContext('2d');
-    const human = 1.8; // 6 feet
-    ctx2.moveTo(30, 300);
-    ctx2.lineTo(30, 350 - 6 * 300 / this.props.maxHeight);
-    ctx2.stroke();
-    ctx.moveTo(0, 300);
-    this.props.data.forEach(position => {
-      const transformedX = position.x * 800 / this.props.maxWidth;
-      const transformedY = 350 - position.y * 300 / this.props.maxHeight;
-      console.log(transformedX, transformedY);
-      ctx.lineTo(transformedX, transformedY);
-    });
+  private interval: any;
 
-    ctx.stroke();
+  private refCanvas: React.RefObject<HTMLCanvasElement>;
 
-    console.log(
-      'Range is   ' +
-      this.props.maxWidth +
-      '   Max height achieved is  ' +
-      this.props.maxHeight +
-      '  time of flight is  ' +
-      this.props.timeOfFlight,
-    );
+  private changeInSelectedPlanet: boolean;
+  private changeInMaxWidth: boolean;
+  private changeInMaxHeight: boolean;
+
+  public shouldComponentUpdate(nextProps: Props, nextState: State) {
+    this.changeInSelectedPlanet = nextProps.backGroundColor !== this.props.backGroundColor;
+    this.changeInMaxWidth = nextProps.maxWidth !== this.props.maxWidth;
+    this.changeInMaxHeight = nextProps.maxHeight !== this.props.maxHeight;
+    return !isEqual(this.props.data, nextProps.data);
   }
 
   public render() {
-    console.log('update Canvas');
     return (
       <div>
-        <button onClick={}>Clear All</button>
         <canvas
-          id={'mycanvas'}
-          ref={this.canvas}
+          id={'canvas'}
+          ref={this.refCanvas}
           width={850}
-          height={350}
+          height={375}
           style={{
             border: '1px solid #000000',
           }}
         />
+        <br />
+        <button onClick={() => { this.clear() }}>Clear All</button>
       </div>
     );
   }
-  private interval = setInterval(this.updateTrajectory, 20);
-  private updateTrajectory() {
+
+  public componentDidMount() {
+    this.paintBackground()
+  }
+
+  public componentDidUpdate() {
     this.clear();
-    // projectile.newPos();
-    // pojectile.update();
+    counter = 0;
+    this.start();
+  }
+  private paintBackground() {
+    const backgroundContext = this.getContextObject();
+    if (backgroundContext) {
+      backgroundContext.fillStyle = this.props.backGroundColor;
+      backgroundContext.fillRect(0, 0, 850, 375);
+      backgroundContext.fill();
+    }
+  }
+  private getContextObject() {
+    const canvas = this.refCanvas.current;
+    return canvas && canvas.getContext('2d');
+  }
+  private renderProjectileTrajectory() {
+    const projectileContext = this.getContextObject()
+    if (projectileContext) {
+      projectileContext.moveTo(0, 375);
+      this.props.data.forEach(position => {
+        const transformedX = position.x * 840 / this.props.maxWidth;
+        const transformedY = 375 - position.y * 365 / this.props.maxHeight;
+        projectileContext.lineTo(transformedX, transformedY);
+      });
+      projectileContext.stroke();
+      projectileContext.fillStyle = 'Red'
+      projectileContext.font = '60px';
+      projectileContext.fillStyle = this.props.backGroundColor;
+      projectileContext.fillRect(390, 260, 120, 50);
+      projectileContext.fillRect(390, 0, 120, 50);
+      projectileContext.fillStyle = 'Red';
+      projectileContext.fillText(`H = ${(this.props.h).toFixed()} meters`, 400, 300);
+      projectileContext.fillText(`Range = ${(this.props.R.toFixed())} meters`, 400, 20);
+    }
+  }
+
+  private updateTrajectory() {
+    if (counter < this.props.data.length) {
+      const transformedX = this.props.data[counter].x * 840 / this.props.maxWidth;
+      const transformedY = 375 - this.props.data[counter].y * 365 / this.props.maxHeight;
+      const projectile = this.getContextObject()
+      if (projectile) {
+        projectile.fillStyle = this.props.backGroundColor;
+        projectile.fillRect(390, 260, 120, 50);
+        projectile.fillRect(390, 0, 120, 50);
+        projectile.fillStyle = 'Red';
+        projectile.fillRect(transformedX, transformedY, 10, 10);
+        projectile.fillText(`H = ${(this.props.data[counter].y).toFixed()} meters`, 400, 300);
+        projectile.fillText(`Range = ${(this.props.data[counter].x).toFixed()} meters`, 400, 20);
+      }
+      counter++;
+    } else {
+      this.renderProjectileTrajectory();
+      this.stop();
+    }
+
+  }
+  private start() {
+    this.interval = setInterval(() => this.updateTrajectory(), 50);
   }
   private stop() {
     clearInterval(this.interval);
   }
+
   private clear() {
-    this.canvas.getContext('2d').clearRect(20, 20, 100, 50);
+    this.stop();
+    const canvas = this.refCanvas.current;
+    const clearCan = canvas && canvas.getContext('2d');
+    clearCan && clearCan.clearRect(0, 0, 850, 375);
+    this.paintBackground();
   }
-  // private update() {
-  //   ctx = myGameArea.context;
-  //   ctx.fillStyle = color;
-  //   ctx.fillRect(this.x, this.y, this.width, this.height);
-  // }
-  // private newPos() {
-  //   this.gravitySpeed += this.gravity;
-  //   this.x += this.speedX;
-  //   this.y += this.speedY + this.gravitySpeed;
-  // }
 }
 
 export default TrajectoryDisplayView;
